@@ -271,7 +271,7 @@ index 51513e7..0563f5f 100644
      k->revision = ICH9_A2_SMB_REVISION;
      k->class_id = PCI_CLASS_SERIAL_SMBUS;
 diff --git a/hw/i386/acpi-build.c b/hw/i386/acpi-build.c
-index f622b91..bc4b0e8 100644
+index f622b91..6cdcda0 100644
 --- a/hw/i386/acpi-build.c
 +++ b/hw/i386/acpi-build.c
 @@ -162,8 +162,8 @@ static void init_common_fadt_data(MachineState *ms, Object *o,
@@ -330,7 +330,7 @@ index f622b91..bc4b0e8 100644
 +
 +        for (unsigned n = 0; n < ARRAY_SIZE(win_osi); n++) {
 +            Aml *osi = aml_if(aml_equal(
-+                aml_call1("_OSI", aml_string(win_osi[n].osi)), aml_int(1)));
++                aml_call1("_OSI", aml_string("%s", win_osi[n].osi)), aml_int(1)));
 +            aml_append(osi, aml_store(aml_int(win_osi[n].osys),
 +                                      aml_name("OSYS")));
 +            aml_append(sb_scope, osi);
