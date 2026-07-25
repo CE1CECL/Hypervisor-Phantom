@@ -309,7 +309,7 @@ compile_qemu() {
       --target-list=x86_64-softmmu --prefix="$OUT_DIR/emulator" \
       --without-default-features \
       \
-      --enable-kvm --enable-linux-io-uring \
+      --enable-kvm --enable-linux-io-uring --enable-linux-aio \
       \
       --enable-pixman --enable-opengl --enable-sdl \
       --enable-spice --enable-spice-protocol \
