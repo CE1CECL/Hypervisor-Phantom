@@ -105,12 +105,12 @@ index 87162ff..f6fe4ea 100644
 +            else sprintf(name, "EHC%X", func);
 +            break;
 +
-+        case 31:
-+            // Slot 31 (0x1F): LPC / SMBus / SATA 2
++        case 20:
++            // Slot 20 (0x14): LPC / SMBus / SATA 2
 +            if (func == 0) sprintf(name, "LPCB");      // ISA Bridge
 +            else if (func == 2) sprintf(name, "SAT1"); // 2nd SATA
 +            else if (func == 3) sprintf(name, "SBUS"); // SMBus
-+            else sprintf(name, "S31%X", func);         // Fallback
++            else sprintf(name, "S20%X", func);         // Fallback
 +            break;
 +
 +        default:
@@ -787,7 +787,7 @@ index 16034aa..8c8eac6 100644
  #define PCI_VENDOR_ID_XEN                0x5853
  #define PCI_DEVICE_ID_XEN_PLATFORM       0x0001
 diff --git a/include/hw/southbridge/ich9.h b/include/hw/southbridge/ich9.h
-index 2c35dd0..8616021 100644
+index 2c35dd0..12f037d 100644
 --- a/include/hw/southbridge/ich9.h
 +++ b/include/hw/southbridge/ich9.h
 @@ -125,10 +125,10 @@ struct ICH9LPCState {
@@ -804,6 +804,15 @@ index 2c35dd0..8616021 100644
  #define ICH9_LPC_NB_PIRQS                       8       /* PCI A-H */
  
  #define ICH9_LPC_PMBASE                         0x40
+@@ -177,7 +177,7 @@ struct ICH9LPCState {
+ #define ICH9_GPIO_GSI "gsi"
+ 
+ /* D31:F2 SATA Controller #1 */
+-#define ICH9_SATA1_DEV                          31
++#define ICH9_SATA1_DEV                          20
+ #define ICH9_SATA1_FUNC                         2
+ 
+ /* D31:F0 power management I/O registers
 @@ -213,7 +213,7 @@ struct ICH9LPCState {
  /* D31:F3 SMBus controller */
  #define TYPE_ICH9_SMB_DEVICE "ICH9-SMB"
@@ -813,6 +822,15 @@ index 2c35dd0..8616021 100644
  #define ICH9_SMB_PI                             0x00
  
  #define ICH9_SMB_SMBMBAR0                       0x10
+@@ -230,7 +230,7 @@ struct ICH9LPCState {
+ #define ICH9_SMB_HOSTC_HST_EN                   ((uint8_t)(1 << 0))
+ 
+ /* D31:F3 SMBus I/O and memory mapped I/O registers */
+-#define ICH9_SMB_DEV                            31
++#define ICH9_SMB_DEV                            20
+ #define ICH9_SMB_FUNC                           3
+ 
+ #define ICH9_SMB_HST_STS                        0x00
 diff --git a/include/standard-headers/linux/qemu_fw_cfg.h b/include/standard-headers/linux/qemu_fw_cfg.h
 index cb93f66..0527126 100644
 --- a/include/standard-headers/linux/qemu_fw_cfg.h
