@@ -37,6 +37,8 @@ qemu-system-x86_64 -cpu host,kvm=off
 
 ## KVM PV Enforce CPUID
 
+> Reference: [`kvm-pv.rst`](https://github.com/qemu/qemu/blob/master/docs/system/i386/kvm-pv.rst)
+
 By default, KVM allows the guest to use **all** paravirtual MSRs (`0x4b564d00`–`0x4b564d08`) even when their corresponding features are not announced via CPUID. Hiding the KVM signature (`kvm=off`) removes the CPUID leaves, but the MSRs remain silently functional.
 
 Enabling `kvm-pv-enforce-cpuid` tells KVM to **enforce** CPUID: if a PV feature bit is not present in `CPUID 0x40000001`, any `RDMSR`/`WRMSR` to the associated MSR will inject `#GP` into the guest.
@@ -51,6 +53,10 @@ qemu-system-x86_64 -cpu host,kvm-pv-enforce-cpuid=on
   <qemu:arg value='host,kvm-pv-enforce-cpuid=on'/>
 </qemu:commandline>
 ```
+
+## Hyper-V Enlightenments
+
+> Reference: [`hyperv.rst`](https://github.com/qemu/qemu/blob/master/docs/system/i386/hyperv.rst)
 
 </details>
 

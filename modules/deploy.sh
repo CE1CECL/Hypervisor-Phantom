@@ -525,10 +525,11 @@ configure_xml() {
         #
 
         --qemu-commandline="-smbios file=/opt/AutoVirt/firmware/smbios.bin"            # SMBIOS binary blob
-        --qemu-commandline="-overcommit cpu-pm=on"                                     # For APERFMPERF MSRs
-        --qemu-commandline="-global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=off" # ACPI PCI hotplug
-        --qemu-commandline="-global ICH9-LPC.x-smi-cpu-hotplug=off"                    # SMI-based CPU hotplug
-        --qemu-commandline="-global ICH9-LPC.x-smi-cpu-hotunplug=off"                  # SMI-based CPU hotunplug
+        --qemu-commandline="-overcommit cpu-pm=on"                                     # Enables APERF/MPERF support (Need CPU pinning)
+        --qemu-commandline="-global host-x86_64-cpu.kvm-pv-enforce-cpuid=on"           # #GP on CPUID-unadvertised KVM PV MSRs (0x4b564d00-08)
+        --qemu-commandline="-global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=off" # Disables ACPI PCI hotplug
+        --qemu-commandline="-global ICH9-LPC.x-smi-cpu-hotplug=off"                    # Disables SMI-based CPU hotplug
+        --qemu-commandline="-global ICH9-LPC.x-smi-cpu-hotunplug=off"                  # Disables SMI-based CPU hotunplug
 
 
 
