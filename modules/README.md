@@ -5,7 +5,7 @@
 
 ## KVM-specific Custom MSR/Signatures
 
-> Reference: [`kvm_para.h`](https://gitlab.com/qemu-project/qemu/-/blob/master/include/standard-headers/asm-x86/kvm_para.h)
+> Reference(s): [`kvm_para.h`](https://gitlab.com/qemu-project/qemu/-/blob/master/include/standard-headers/asm-x86/kvm_para.h)
 
 ## Hypervisor Bit
 
@@ -37,11 +37,13 @@ qemu-system-x86_64 -cpu host,kvm=off
 
 ## KVM PV Enforce CPUID
 
-> Reference: [`kvm-pv.rst`](https://github.com/qemu/qemu/blob/master/docs/system/i386/kvm-pv.rst)
+> Reference(s): [`kvm.c`](https://github.com/qemu/qemu/raw/refs/heads/master/target/i386/kvm/kvm.c)
+> [`kvm-pv.rst`](https://github.com/qemu/qemu/blob/master/docs/system/i386/kvm-pv.rst)
+> [`#GP`](https://en.wikipedia.org/wiki/General_protection_fault)
 
-By default, KVM allows the guest to use **all** paravirtual MSRs (`0x4b564d00`–`0x4b564d08`) even when their corresponding features are not announced via CPUID. Hiding the KVM signature (`kvm=off`) removes the CPUID leaves, but the MSRs remain silently functional.
+When enabled, QEMU sets the `kvm_pv_enforce_cpuid` property, which triggers `target/i386/kvm/kvm.c` to issue `kvm_vcpu_enable_cap` with `KVM_CAP_ENFORCE_PV_FEATURE_CPUID`. 
 
-Enabling `kvm-pv-enforce-cpuid` tells KVM to **enforce** CPUID: if a PV feature bit is not present in `CPUID 0x40000001`, any `RDMSR`/`WRMSR` to the associated MSR will inject `#GP` into the guest.
+This forces KVM to strictly enforce paravirtual CPUID feature advertisement. If the guest attempts to access a KVM PV MSR (range `0x4b564d00-08`) corresponding to a feature that was not explicitly advertised in the KVM CPUID leaf (`0x40000001`), KVM will inject a `#GP` (General Protection Fault) into the guest. This ensures the guest OS cannot interact with or utilize unrequested paravirtual optimizations.
 
 ```bash
 qemu-system-x86_64 -cpu host,kvm-pv-enforce-cpuid=on
