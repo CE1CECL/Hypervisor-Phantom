@@ -322,15 +322,31 @@ configure_xml() {
         --xml "./cpu/cache/@mode=passthrough"
         --xml "./cpu/maxphysaddr/@mode=passthrough"
 
-        # TODO: Make this change based on if user is on AMD or Intel
-
-        --xml "./cpu/feature[@name='$CPU_VIRTUALIZATION']/@policy=require"        # OPTIMIZATION: Enables AMD SVM (CPUID.80000001:ECX[2])
-        --xml "./cpu/feature[@name='topoext']/@policy=require"                    # OPTIMIZATION: Exposes extended topology (CPUID.80000001:ECX[22], CPUID.8000001E)
-        --xml "./cpu/feature[@name='invtsc']/@policy=require"                     # OPTIMIZATION: Provides invariant TSC (CPUID.80000007:EDX[8])
-        --xml "./cpu/feature[@name='hypervisor']/@policy=$CPU_FEATURE_HYPERVISOR" # CONCEALMENT: Clears Hypervisor Present bit (CPUID.1:ECX[31])
-        --xml "./cpu/feature[@name='ssbd']/@policy=disable"                       # CONCEALMENT: Clears Speculative Store Bypass Disable (CPUID.7.0:EDX[31])
-        --xml "./cpu/feature[@name='amd-ssbd']/@policy=disable"                   # CONCEALMENT: Clears AMD SSBD flag (CPUID.80000008:EBX[25])
-        --xml "./cpu/feature[@name='virt-ssbd']/@policy=disable"                  # CONCEALMENT: Clears virtual SSBD exposure (CPUID.7.0:EDX[31])
+        # Base CPU features
+        --xml "./cpu/feature[@name='hypervisor']/@policy=$CPU_FEATURE_HYPERVISOR"
+        --xml "./cpu/feature[@name='x2apic']/@policy=disable"
+        --xml "./cpu/feature[@name='ibrs']/@policy=disable"
+        --xml "./cpu/feature[@name='amd-ssbd']/@policy=disable"
+        --xml "./cpu/feature[@name='virt-ssbd']/@policy=disable"
+        
+        # Vendor-specific CPU features
+        case "$CPU_VENDOR_ID" in
+            AuthenticAMD)
+                --xml "./cpu/feature[@name='svm']/@policy=require"
+                --xml "./cpu/feature[@name='topoext']/@policy=require"
+                --xml "./cpu/feature[@name='spec-ctrl']/@policy=disable"
+                --xml "./cpu/feature[@name='ssbd']/@policy=disable"
+                --xml "./cpu/feature[@name='stibp']/@policy=disable"
+                ;;
+        
+            GenuineIntel)
+                --xml "./cpu/feature[@name='vmx']/@policy=require"
+                ;;
+        
+            *)
+                fmtr::fatal "Unsupported CPU vendor: $CPU_VENDOR_ID"
+                ;;
+        esac
 
 
 
