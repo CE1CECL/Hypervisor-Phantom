@@ -246,6 +246,33 @@ configure_xml() {
         esac
     done
 
+    ################################################################################
+    #
+    # CPU vendor-specific feature flags
+    #
+
+    local -a CPU_FEATURE_ARGS=()
+    case "$CPU_VENDOR_ID" in
+        AuthenticAMD)
+            CPU_FEATURE_ARGS=(
+                '--xml' "./cpu/feature[@name='svm']/@policy=require"
+                '--xml' "./cpu/feature[@name='topoext']/@policy=require"
+                '--xml' "./cpu/feature[@name='spec-ctrl']/@policy=disable"
+                '--xml' "./cpu/feature[@name='ssbd']/@policy=disable"
+                '--xml' "./cpu/feature[@name='stibp']/@policy=disable"
+            )
+            ;;
+        GenuineIntel)
+            CPU_FEATURE_ARGS=(
+                '--xml' "./cpu/feature[@name='vmx']/@policy=require"
+            )
+            ;;
+        *)
+            fmtr::fatal "Unsupported CPU vendor: ${CPU_VENDOR_ID:-<empty>}"
+            return 1
+            ;;
+    esac
+
     local -a args=(
         ################################################################################
         #
@@ -329,24 +356,7 @@ configure_xml() {
         --xml "./cpu/feature[@name='amd-ssbd']/@policy=disable"
         --xml "./cpu/feature[@name='virt-ssbd']/@policy=disable"
         
-        # Vendor-specific CPU features
-        case "$CPU_VENDOR_ID" in
-            AuthenticAMD)
-                --xml "./cpu/feature[@name='svm']/@policy=require"
-                --xml "./cpu/feature[@name='topoext']/@policy=require"
-                --xml "./cpu/feature[@name='spec-ctrl']/@policy=disable"
-                --xml "./cpu/feature[@name='ssbd']/@policy=disable"
-                --xml "./cpu/feature[@name='stibp']/@policy=disable"
-                ;;
-        
-            GenuineIntel)
-                --xml "./cpu/feature[@name='vmx']/@policy=require"
-                ;;
-        
-            *)
-                fmtr::fatal "Unsupported CPU vendor: $CPU_VENDOR_ID"
-                ;;
-        esac
+        "${CPU_FEATURE_ARGS[@]}"   # Vendor-specific CPU features (see above)
 
 
 
