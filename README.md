@@ -86,17 +86,3 @@ vfio-pci 0000:01:00.0: Firmware has requested this device have a 1:1 IOMMU mappi
 
 - Disable `Pre-boot DMA Protection` (Needed for VFIO)
   - (*Change `IOMMU` from `[Auto]` to `[Enabled]` to find hidden setting*)
-
-
-
-
-
----
-
-<a href="https://www.star-history.com/#Scrut1ny/AutoVirt&type=date&legend=bottom-right">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Scrut1ny/AutoVirt&type=date&theme=dark&legend=bottom-right" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Scrut1ny/AutoVirt&type=date&legend=bottom-right" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Scrut1ny/AutoVirt&type=date&legend=bottom-right" />
- </picture>
-</a>
